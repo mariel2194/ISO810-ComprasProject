@@ -10,23 +10,22 @@ using ISO810_ComprasProject.Models;
 
 namespace ISO810_ComprasProject.Controllers
 {
-    public class ArticulosController : Controller
+    public class DepartamentosController : Controller
     {
         private readonly ComprasDBContext _context;
 
-        public ArticulosController(ComprasDBContext context)
+        public DepartamentosController(ComprasDBContext context)
         {
             _context = context;
         }
 
-        // GET: Articulos
+        // GET: Departamentos
         public async Task<IActionResult> Index()
         {
-            var comprasDBContext = _context.Articulo.Include(a => a.UnidadMedida);
-            return View(await comprasDBContext.ToListAsync());
+            return View(await _context.Departamento.ToListAsync());
         }
 
-        // GET: Articulos/Details/5
+        // GET: Departamentos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,42 +33,39 @@ namespace ISO810_ComprasProject.Controllers
                 return NotFound();
             }
 
-            var articulos = await _context.Articulo
-                .Include(a => a.UnidadMedida)
-                .FirstOrDefaultAsync(m => m.ArticuloId == id);
-            if (articulos == null)
+            var departamentos = await _context.Departamento
+                .FirstOrDefaultAsync(m => m.DepartamentoId == id);
+            if (departamentos == null)
             {
                 return NotFound();
             }
 
-            return View(articulos);
+            return View(departamentos);
         }
 
-        // GET: Articulos/Create
+        // GET: Departamentos/Create
         public IActionResult Create()
         {
-            ViewData["UnidadMedidaId"] = new SelectList(_context.UnidadMedida, "UnidadMedidaId", "Descripcion");
             return View();
         }
 
-        // POST: Articulos/Create
+        // POST: Departamentos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ArticuloId,Descripcion,Marca,UnidadMedidaId,CostoUnitario,Stock,Activo")] Articulos articulos)
+        public async Task<IActionResult> Create([Bind("DepartamentoId,Nombre,Activo")] Departamentos departamentos)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(articulos);
+                _context.Add(departamentos);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UnidadMedidaId"] = new SelectList(_context.UnidadMedida, "UnidadMedidaId", "Descripcion", articulos.UnidadMedidaId);
-            return View(articulos);
+            return View(departamentos);
         }
 
-        // GET: Articulos/Edit/5
+        // GET: Departamentos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,23 +73,22 @@ namespace ISO810_ComprasProject.Controllers
                 return NotFound();
             }
 
-            var articulos = await _context.Articulo.FindAsync(id);
-            if (articulos == null)
+            var departamentos = await _context.Departamento.FindAsync(id);
+            if (departamentos == null)
             {
                 return NotFound();
             }
-            ViewData["UnidadMedidaId"] = new SelectList(_context.UnidadMedida, "UnidadMedidaId", "Descripcion", articulos.UnidadMedidaId);
-            return View(articulos);
+            return View(departamentos);
         }
 
-        // POST: Articulos/Edit/5
+        // POST: Departamentos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ArticuloId,Descripcion,Marca,UnidadMedidaId,CostoUnitario,Stock,Activo")] Articulos articulos)
+        public async Task<IActionResult> Edit(int id, [Bind("DepartamentoId,Nombre,Activo")] Departamentos departamentos)
         {
-            if (id != articulos.ArticuloId)
+            if (id != departamentos.DepartamentoId)
             {
                 return NotFound();
             }
@@ -102,12 +97,12 @@ namespace ISO810_ComprasProject.Controllers
             {
                 try
                 {
-                    _context.Update(articulos);
+                    _context.Update(departamentos);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ArticulosExists(articulos.ArticuloId))
+                    if (!DepartamentosExists(departamentos.DepartamentoId))
                     {
                         return NotFound();
                     }
@@ -118,11 +113,10 @@ namespace ISO810_ComprasProject.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UnidadMedidaId"] = new SelectList(_context.UnidadMedida, "UnidadMedidaId", "Descripcion", articulos.UnidadMedidaId);
-            return View(articulos);
+            return View(departamentos);
         }
 
-        // GET: Articulos/Delete/5
+        // GET: Departamentos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,35 +124,34 @@ namespace ISO810_ComprasProject.Controllers
                 return NotFound();
             }
 
-            var articulos = await _context.Articulo
-                .Include(a => a.UnidadMedida)
-                .FirstOrDefaultAsync(m => m.ArticuloId == id);
-            if (articulos == null)
+            var departamentos = await _context.Departamento
+                .FirstOrDefaultAsync(m => m.DepartamentoId == id);
+            if (departamentos == null)
             {
                 return NotFound();
             }
 
-            return View(articulos);
+            return View(departamentos);
         }
 
-        // POST: Articulos/Delete/5
+        // POST: Departamentos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var articulos = await _context.Articulo.FindAsync(id);
-            if (articulos != null)
+            var departamentos = await _context.Departamento.FindAsync(id);
+            if (departamentos != null)
             {
-                _context.Articulo.Remove(articulos);
+                _context.Departamento.Remove(departamentos);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ArticulosExists(int id)
+        private bool DepartamentosExists(int id)
         {
-            return _context.Articulo.Any(e => e.ArticuloId == id);
+            return _context.Departamento.Any(e => e.DepartamentoId == id);
         }
     }
 }

@@ -1,5 +1,8 @@
-using ISO810_ComprasProject.Context;
+using ISO810_ComprasProject.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using ISO810_ComprasProject.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,10 +10,29 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ComprasDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-var app = builder.Build();
+
+//builder.Services.AddDefaultIdentity<Users>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ComprasDBContext>();
+
+//// Add Identity
+builder.Services.AddIdentity<Users, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;  
+})
+    .AddDefaultUI()
+    .AddEntityFrameworkStores<ComprasDBContext>()
+    .AddDefaultTokenProviders();
+
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+
+
+var app = builder.Build();
+
+
 
 using (var scope = app.Services.CreateScope())
 {
@@ -18,12 +40,14 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated(); // Ensure the database is created if it doesn't exist
 }
 
-
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -31,11 +55,13 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapRazorPages();
 
 app.Run();

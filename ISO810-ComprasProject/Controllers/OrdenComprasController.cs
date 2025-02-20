@@ -10,23 +10,23 @@ using ISO810_ComprasProject.Models;
 
 namespace ISO810_ComprasProject.Controllers
 {
-    public class ArticulosController : Controller
+    public class OrdenComprasController : Controller
     {
         private readonly ComprasDBContext _context;
 
-        public ArticulosController(ComprasDBContext context)
+        public OrdenComprasController(ComprasDBContext context)
         {
             _context = context;
         }
 
-        // GET: Articulos
+        // GET: OrdenCompras
         public async Task<IActionResult> Index()
         {
-            var comprasDBContext = _context.Articulo.Include(a => a.UnidadMedida);
+            var comprasDBContext = _context.OrdenCompra.Include(o => o.Articulo).Include(o => o.UnidadMedida);
             return View(await comprasDBContext.ToListAsync());
         }
 
-        // GET: Articulos/Details/5
+        // GET: OrdenCompras/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,42 +34,45 @@ namespace ISO810_ComprasProject.Controllers
                 return NotFound();
             }
 
-            var articulos = await _context.Articulo
-                .Include(a => a.UnidadMedida)
-                .FirstOrDefaultAsync(m => m.ArticuloId == id);
-            if (articulos == null)
+            var ordenCompras = await _context.OrdenCompra
+                .Include(o => o.Articulo)
+                .Include(o => o.UnidadMedida)
+                .FirstOrDefaultAsync(m => m.CompraId == id);
+            if (ordenCompras == null)
             {
                 return NotFound();
             }
 
-            return View(articulos);
+            return View(ordenCompras);
         }
 
-        // GET: Articulos/Create
+        // GET: OrdenCompras/Create
         public IActionResult Create()
         {
+            ViewData["ArticuloId"] = new SelectList(_context.Articulo, "ArticuloId", "Descripcion");
             ViewData["UnidadMedidaId"] = new SelectList(_context.UnidadMedida, "UnidadMedidaId", "Descripcion");
             return View();
         }
 
-        // POST: Articulos/Create
+        // POST: OrdenCompras/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ArticuloId,Descripcion,Marca,UnidadMedidaId,CostoUnitario,Stock,Activo")] Articulos articulos)
+        public async Task<IActionResult> Create([Bind("CompraId,Fecha,ArticuloId,Cantidad,UnidadMedidaId,Estado")] OrdenCompras ordenCompras)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(articulos);
+                _context.Add(ordenCompras);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UnidadMedidaId"] = new SelectList(_context.UnidadMedida, "UnidadMedidaId", "Descripcion", articulos.UnidadMedidaId);
-            return View(articulos);
+            ViewData["ArticuloId"] = new SelectList(_context.Articulo, "ArticuloId", "Descripcion", ordenCompras.ArticuloId);
+            ViewData["UnidadMedidaId"] = new SelectList(_context.UnidadMedida, "UnidadMedidaId", "Descripcion", ordenCompras.UnidadMedidaId);
+            return View(ordenCompras);
         }
 
-        // GET: Articulos/Edit/5
+        // GET: OrdenCompras/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,23 +80,24 @@ namespace ISO810_ComprasProject.Controllers
                 return NotFound();
             }
 
-            var articulos = await _context.Articulo.FindAsync(id);
-            if (articulos == null)
+            var ordenCompras = await _context.OrdenCompra.FindAsync(id);
+            if (ordenCompras == null)
             {
                 return NotFound();
             }
-            ViewData["UnidadMedidaId"] = new SelectList(_context.UnidadMedida, "UnidadMedidaId", "Descripcion", articulos.UnidadMedidaId);
-            return View(articulos);
+            ViewData["ArticuloId"] = new SelectList(_context.Articulo, "ArticuloId", "Descripcion", ordenCompras.ArticuloId);
+            ViewData["UnidadMedidaId"] = new SelectList(_context.UnidadMedida, "UnidadMedidaId", "Descripcion", ordenCompras.UnidadMedidaId);
+            return View(ordenCompras);
         }
 
-        // POST: Articulos/Edit/5
+        // POST: OrdenCompras/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ArticuloId,Descripcion,Marca,UnidadMedidaId,CostoUnitario,Stock,Activo")] Articulos articulos)
+        public async Task<IActionResult> Edit(int id, [Bind("CompraId,Fecha,ArticuloId,Cantidad,UnidadMedidaId,Estado")] OrdenCompras ordenCompras)
         {
-            if (id != articulos.ArticuloId)
+            if (id != ordenCompras.CompraId)
             {
                 return NotFound();
             }
@@ -102,12 +106,12 @@ namespace ISO810_ComprasProject.Controllers
             {
                 try
                 {
-                    _context.Update(articulos);
+                    _context.Update(ordenCompras);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ArticulosExists(articulos.ArticuloId))
+                    if (!OrdenComprasExists(ordenCompras.CompraId))
                     {
                         return NotFound();
                     }
@@ -118,11 +122,12 @@ namespace ISO810_ComprasProject.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UnidadMedidaId"] = new SelectList(_context.UnidadMedida, "UnidadMedidaId", "Descripcion", articulos.UnidadMedidaId);
-            return View(articulos);
+            ViewData["ArticuloId"] = new SelectList(_context.Articulo, "ArticuloId", "Descripcion", ordenCompras.ArticuloId);
+            ViewData["UnidadMedidaId"] = new SelectList(_context.UnidadMedida, "UnidadMedidaId", "Descripcion", ordenCompras.UnidadMedidaId);
+            return View(ordenCompras);
         }
 
-        // GET: Articulos/Delete/5
+        // GET: OrdenCompras/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,35 +135,36 @@ namespace ISO810_ComprasProject.Controllers
                 return NotFound();
             }
 
-            var articulos = await _context.Articulo
-                .Include(a => a.UnidadMedida)
-                .FirstOrDefaultAsync(m => m.ArticuloId == id);
-            if (articulos == null)
+            var ordenCompras = await _context.OrdenCompra
+                .Include(o => o.Articulo)
+                .Include(o => o.UnidadMedida)
+                .FirstOrDefaultAsync(m => m.CompraId == id);
+            if (ordenCompras == null)
             {
                 return NotFound();
             }
 
-            return View(articulos);
+            return View(ordenCompras);
         }
 
-        // POST: Articulos/Delete/5
+        // POST: OrdenCompras/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var articulos = await _context.Articulo.FindAsync(id);
-            if (articulos != null)
+            var ordenCompras = await _context.OrdenCompra.FindAsync(id);
+            if (ordenCompras != null)
             {
-                _context.Articulo.Remove(articulos);
+                _context.OrdenCompra.Remove(ordenCompras);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ArticulosExists(int id)
+        private bool OrdenComprasExists(int id)
         {
-            return _context.Articulo.Any(e => e.ArticuloId == id);
+            return _context.OrdenCompra.Any(e => e.CompraId == id);
         }
     }
 }

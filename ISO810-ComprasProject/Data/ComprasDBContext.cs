@@ -1,9 +1,11 @@
 ﻿using ISO810_ComprasProject.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace ISO810_ComprasProject.Context
+namespace ISO810_ComprasProject.Data
 {
-    public class ComprasDBContext : DbContext
+    public class ComprasDBContext : IdentityDbContext<Users>
     {
         public ComprasDBContext(DbContextOptions<ComprasDBContext> options)
             : base(options) { }
@@ -16,7 +18,7 @@ namespace ISO810_ComprasProject.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder); 
 
             modelBuilder.Entity<Articulos>()
                 .HasIndex(a => a.Descripcion)
