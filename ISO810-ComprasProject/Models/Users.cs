@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ISO810_ComprasProject.Models
 {
@@ -16,22 +17,20 @@ namespace ISO810_ComprasProject.Models
         [Display(Name = "Apellido")]
         public string Apellido { get; set; }
 
-        [Required]
         [DataType(DataType.PhoneNumber)]
         [Display(Name = "Telefono")]
-        public override string PhoneNumber { get; set; } 
+        public override string? PhoneNumber { get; set; } 
 
         [Display(Name = "Imagen de Perfil")]
         public string? ImagenPerfil { get; set; }
 
-        [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Fecha de Nacimiento")]
-        public DateTime FechaNacimiento { get; set; }
+        public DateTime? FechaNacimiento { get; set; }
 
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public override string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

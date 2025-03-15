@@ -2,6 +2,8 @@ using ISO810_ComprasProject.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using ISO810_ComprasProject.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using ISO810_ComprasProject.Controllers;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,15 +12,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ComprasDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/"+nameof(AccountController).Replace("Controller","") + "/" +nameof(AccountController.Login);
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        options.SlidingExpiration = true;
+    });
 
 //builder.Services.AddDefaultIdentity<Users>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ComprasDBContext>();
 
 //// Add Identity
-builder.Services.AddIdentity<Users, IdentityRole>(options =>
-{
-    options.SignIn.RequireConfirmedAccount = false;  
-})
-    .AddDefaultUI()
+builder.Services.AddIdentity<Users, IdentityRole>()
     .AddEntityFrameworkStores<ComprasDBContext>()
     .AddDefaultTokenProviders();
 
@@ -28,6 +33,7 @@ builder.Services.AddIdentity<Users, IdentityRole>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddAuthorization();
 
 
 var app = builder.Build();

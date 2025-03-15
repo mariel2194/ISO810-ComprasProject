@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ISO810_ComprasProject.Data;
 using ISO810_ComprasProject.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ISO810_ComprasProject.Controllers
 {
+    [Authorize]
     public class ArticulosController : Controller
     {
         private readonly ComprasDBContext _context;
@@ -146,14 +148,30 @@ namespace ISO810_ComprasProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var articulos = await _context.Articulo.FindAsync(id);
-            if (articulos != null)
+            try
             {
-                _context.Articulo.Remove(articulos);
-            }
+                var articulos = await _context.Articulo.FindAsync(id);
+                if (articulos != null)
+                {
+                    _context.Articulo.Remove(articulos);
+                }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("REFERENCE constraint"))
+                {
+                    TempData["ErrorMessage"] = "No se puede eliminar este Articulo porque tiene registros relacionados.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Ocurrió un error al intentar eliminar el Articulo.";
+                }
+                return RedirectToAction(nameof(Index));
+            }
+           
         }
 
         private bool ArticulosExists(int id)

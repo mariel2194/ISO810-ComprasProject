@@ -1,0 +1,101 @@
+﻿@using ISO810_ComprasProject.Controllers
+@model ISO810_ComprasProject.Models.RegisterViewModel;
+@{
+	ViewData["Title"] = "Registro";
+	Layout = "~/Views/Shared/_LayoutCPBlank.cshtml";
+}
+<!--**********************************
+Content body start
+***********************************-->
+<div class="container-fluid h-100">
+	<div class="row h-100">
+		<div class="col-lg-6 col-md-7 col-sm-12 mx-auto align-self-center">
+			<div class="login-form">
+				<div class="text-center">
+					<h3 class="title">Registro</h3>
+					<p>Crea tu cuenta y accede para comenzar a utilizar el módulo de compras</p>
+				</div>
+				<form asp-controller="@nameof(AccountController).Replace("Controller","")" asp-action="@nameof(AccountController.Register)" method="post">
+					<div class="mb-4">
+						<label class="mb-1 text-dark">Nombre</label>
+						<input type="text" class="form-control form-control" placeholder="Juan" asp-for="Nombre">
+					</div>
+					<div class="mb-4">
+						<label class="mb-1 text-dark">Apellido</label>
+						<input type="text" class="form-control form-control" placeholder="Valdez" asp-for="Apellido">
+					</div>
+					<div class="mb-4">
+						<label class="mb-1 text-dark">Email</label>
+						<input type="email" class="form-control form-control" placeholder="correo@ejemplo.com" asp-for="Email">
+					</div>
+					<div class="mb-4 position-relative">
+						<label class="mb-1 text-dark">Contraseña</label>
+						<input type="password" id="dz-password" class="form-control form-control" placeholder="123456" asp-for="Password">
+						<span class="show-pass eye">
+
+							<i class="fa fa-eye-slash"></i>
+							<i class="fa fa-eye"></i>
+
+						</span>
+					</div>
+					<div class="mb-4 position-relative">
+						<label class="mb-1 text-dark">Confirmar contraseña</label>
+						<input type="password" id="dz-password" class="form-control form-control" placeholder="123456" asp-for="ConfirmarPassword">
+						<span class="show-pass eye">
+
+							<i class="fa fa-eye-slash"></i>
+							<i class="fa fa-eye"></i>
+
+						</span>
+					</div>
+					<div class="text-center mb-4">
+						<button type="submit" formmethod="post" class="btn btn-primary btn-block">Registrar</button>
+					</div>
+
+					<p class="text-center">
+						¿Ya estas registrado?
+						<a class="btn-link text-primary" href="@Url.Action(nameof(AccountController.Login), nameof(AccountController).Replace("Controller", ""))">Iniciar Sesion</a>
+					</p>
+
+					@if (ViewData["Mensaje"] != null)
+					{
+						<div class="alert alert-danger" role="alert" >
+							@ViewData["Mensaje"]
+						</div>
+					}
+
+				</form>
+			</div>
+		</div>
+		<div class="col-xl-6 col-lg-6">
+			<div class="pages-left h-100">
+				<div class="login-content">
+				</div>
+				<div class="login-media text-center">
+					<img src="~/cp/images/login.png" alt="">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--**********************************
+	Content body end
+***********************************-->
+@section CP_style
+	{
+
+}
+
+@section cp_script
+{
+	<!--**********************************
+		Scripts
+	***********************************-->
+	<!-- Required vendors -->
+	<script src="~/cp/vendor/global/global.min.js"></script>
+	<script src="~/cp/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+	<script src="~/cp/js/deznav-init.js"></script>
+@* <script src="~/cp/js/demo.js"></script> *@
+	<script src="~/cp/js/custom.js"></script>
+@* <script src="~/cp/js/styleSwitcher.js"></script> *@
+}

@@ -20,6 +20,13 @@ namespace ISO810_ComprasProject.Models
         [StringLength(14)]
         public string RNC { get; set; }
 
+        [Required(ErrorMessage = "El tipo de documento es obligatorio.")]
+        public string TipoDocumento { get; set; } // "Cédula" o "RNC"
+
+        [Required(ErrorMessage = "El número de documento es obligatorio.")]
+        [MaxLength(11, ErrorMessage = "El número de documento no puede tener más de 11 caracteres.")]
+        public string NumeroDocumento { get; set; }
+
         [Required]
         [Display(Name = "Nombre Comercial")]
         [StringLength(25)]
