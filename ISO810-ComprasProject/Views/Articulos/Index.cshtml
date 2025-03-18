@@ -4,11 +4,20 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Articulos</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Crear Nuevo</a>
 </p>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+
 <table class="table">
     <thead>
         <tr>
@@ -55,11 +64,12 @@
                 @Html.DisplayFor(modelItem => item.Activo)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ArticuloId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ArticuloId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ArticuloId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.ArticuloId">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.ArticuloId">Detalles</a> |
+                <a asp-action="Delete" asp-route-id="@item.ArticuloId">Eliminar</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+

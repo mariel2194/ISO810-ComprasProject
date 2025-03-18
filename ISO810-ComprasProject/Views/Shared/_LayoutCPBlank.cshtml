@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <partial name="cp/_Meta" />
+    <!-- PAGE TITLE HERE -->
+    <title>@ViewBag.Title - Modulo de Compras</title>
+    <!-- FAVICONS ICON -->
+    <link rel="shortcut icon" type="image/png" href="~/cp/images/favicon.png">
+    @RenderSection("cp_style", false)
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <link href="~/cp/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="~/cp/css/style.css" rel="stylesheet">
+    <link href="~/css/style.css" rel="stylesheet">
+</head>
+<body class="vh-100">
+    <div class="authincation h-100">
+        @RenderBody()
+    </div>
+    @RenderSection("cp_script", false)
+</body>
+</html>

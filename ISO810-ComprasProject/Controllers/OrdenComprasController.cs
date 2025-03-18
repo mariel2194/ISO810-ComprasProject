@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ISO810_ComprasProject.Data;
 using ISO810_ComprasProject.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ISO810_ComprasProject.Controllers
 {
+    [Authorize]
     public class OrdenComprasController : Controller
     {
         private readonly ComprasDBContext _context;
@@ -66,7 +68,13 @@ namespace ISO810_ComprasProject.Controllers
                 _context.Add(ordenCompras);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+            }else if(ModelState.ContainsKey("Articulo") && ModelState["Articulo"].Errors.Any()) 
+            {
+                _context.Add(ordenCompras);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
+
             ViewData["ArticuloId"] = new SelectList(_context.Articulo, "ArticuloId", "Descripcion", ordenCompras.ArticuloId);
             ViewData["UnidadMedidaId"] = new SelectList(_context.UnidadMedida, "UnidadMedidaId", "Descripcion", ordenCompras.UnidadMedidaId);
             return View(ordenCompras);
@@ -121,6 +129,25 @@ namespace ISO810_ComprasProject.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
+            }else if(ModelState.ContainsKey("Articulo") && ModelState["Articulo"].Errors.Any()) 
+            {
+                try
+                {
+                    _context.Update(ordenCompras);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!OrdenComprasExists(ordenCompras.CompraId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
             }
             ViewData["ArticuloId"] = new SelectList(_context.Articulo, "ArticuloId", "Descripcion", ordenCompras.ArticuloId);
             ViewData["UnidadMedidaId"] = new SelectList(_context.UnidadMedida, "UnidadMedidaId", "Descripcion", ordenCompras.UnidadMedidaId);
@@ -130,6 +157,8 @@ namespace ISO810_ComprasProject.Controllers
         // GET: OrdenCompras/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+           
+
             if (id == null)
             {
                 return NotFound();
@@ -152,14 +181,30 @@ namespace ISO810_ComprasProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var ordenCompras = await _context.OrdenCompra.FindAsync(id);
-            if (ordenCompras != null)
+            try
             {
-                _context.OrdenCompra.Remove(ordenCompras);
-            }
+                var ordenCompras = await _context.OrdenCompra.FindAsync(id);
+                if (ordenCompras != null)
+                {
+                    _context.OrdenCompra.Remove(ordenCompras);
+                }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("REFERENCE constraint"))
+                {
+                    TempData["ErrorMessage"] = "No se puede eliminar esta Orden de Compra porque tiene registros relacionados.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Ocurrió un error al intentar eliminar esta Orden de Compra.";
+                }
+                return RedirectToAction(nameof(Index));
+            }
+           
         }
 
         private bool OrdenComprasExists(int id)

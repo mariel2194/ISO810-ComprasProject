@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ISO810_ComprasProject.Data;
 using ISO810_ComprasProject.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ISO810_ComprasProject.Controllers
 {
+    [Authorize]
     public class UnidadesMedidaController : Controller
     {
         private readonly ComprasDBContext _context;
