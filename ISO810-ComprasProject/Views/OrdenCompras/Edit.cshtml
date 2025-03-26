@@ -4,9 +4,10 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Editar</h1>
+<h1>Orden de Compras</h1>
 
-<h4>Orden de Compras</h4>
+<h3>Editar</h3>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -19,9 +20,14 @@
                 <span asp-validation-for="Fecha" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ArticuloId" class="control-label">Articulo</label>
+                <label asp-for="ArticuloId" class="control-label">Artículo</label>
                 <select asp-for="ArticuloId" class="form-control" asp-items="ViewBag.ArticuloId"></select>
                 <span asp-validation-for="ArticuloId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Articulo.CostoUnitario" class="control-label"></label>
+                <input asp-for="Articulo.CostoUnitario" class="form-control" />
+                <span asp-validation-for="Articulo.CostoUnitario" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Cantidad" class="control-label"></label>
@@ -29,7 +35,12 @@
                 <span asp-validation-for="Cantidad" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UnidadMedidaId" class="control-label"></label>
+                <label asp-for="Monto" class="control-label"></label>
+                <input asp-for="Monto" class="form-control" />
+                <span asp-validation-for="Monto" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UnidadMedidaId" class="control-label">Unidad de Medida</label>
                 <select asp-for="UnidadMedidaId" class="form-control" asp-items="ViewBag.UnidadMedidaId"></select>
                 <span asp-validation-for="UnidadMedidaId" class="text-danger"></span>
             </div>

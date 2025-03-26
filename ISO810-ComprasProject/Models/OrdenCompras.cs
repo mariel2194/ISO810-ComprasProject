@@ -11,24 +11,31 @@ namespace ISO810_ComprasProject.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CompraId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "El campo Fecha es requerido")]
         [DataType(DataType.Date)]
         public DateTime Fecha { get; set; }
 
         public int ArticuloId { get; set; }
 
         [ForeignKey("ArticuloId")]
+        [Display(Name = "Artículo")]
         public virtual Articulos Articulo { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "La cantidad es requerida")]
         [Range(1, int.MaxValue, ErrorMessage = "Cantidad debe ser mayor que 0.")]
-        public int Cantidad { get; set; }        
-
+        public int Cantidad { get; set; }  
+        
         public int UnidadMedidaId { get; set; }
 
         [ForeignKey("UnidadMedidaId")]
+        [Display(Name = "Unidad de Medida")]
         public virtual UnidadesMedida UnidadMedida { get; set; }
 
+
+        public double Monto { get; set; }
+
+
+        [Display(Name = "Estado")]
         public EstadoCompra Estado { get; set; } = EstadoCompra.Pendiente;
 
 

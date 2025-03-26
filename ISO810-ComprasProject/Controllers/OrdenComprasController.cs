@@ -52,23 +52,29 @@ namespace ISO810_ComprasProject.Controllers
         public IActionResult Create()
         {
             ViewData["ArticuloId"] = new SelectList(_context.Articulo, "ArticuloId", "Descripcion");
+            ViewBag.Articulos = _context.Articulo
+                .Select(a => new { a.ArticuloId, a.CostoUnitario })
+                .ToList(); 
+
             ViewData["UnidadMedidaId"] = new SelectList(_context.UnidadMedida, "UnidadMedidaId", "Descripcion");
             return View();
         }
+
 
         // POST: OrdenCompras/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CompraId,Fecha,ArticuloId,Cantidad,UnidadMedidaId,Estado")] OrdenCompras ordenCompras)
+        public async Task<IActionResult> Create([Bind("CompraId,Fecha,ArticuloId,Cantidad,Monto,UnidadMedidaId,Estado")] OrdenCompras ordenCompras)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(ordenCompras);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }else if(ModelState.ContainsKey("Articulo") && ModelState["Articulo"].Errors.Any()) 
+            }
+            else if (ModelState.ContainsKey("Articulo") && ModelState["Articulo"].Errors.Any())
             {
                 _context.Add(ordenCompras);
                 await _context.SaveChangesAsync();
@@ -103,7 +109,7 @@ namespace ISO810_ComprasProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CompraId,Fecha,ArticuloId,Cantidad,UnidadMedidaId,Estado")] OrdenCompras ordenCompras)
+        public async Task<IActionResult> Edit(int id, [Bind("CompraId,Fecha,ArticuloId,Cantidad,Monto,UnidadMedidaId,Estado")] OrdenCompras ordenCompras)
         {
             if (id != ordenCompras.CompraId)
             {
@@ -129,7 +135,8 @@ namespace ISO810_ComprasProject.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }else if(ModelState.ContainsKey("Articulo") && ModelState["Articulo"].Errors.Any()) 
+            }
+            else if (ModelState.ContainsKey("Articulo") && ModelState["Articulo"].Errors.Any())
             {
                 try
                 {
@@ -157,7 +164,7 @@ namespace ISO810_ComprasProject.Controllers
         // GET: OrdenCompras/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-           
+
 
             if (id == null)
             {
@@ -204,7 +211,7 @@ namespace ISO810_ComprasProject.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-           
+
         }
 
         private bool OrdenComprasExists(int id)
