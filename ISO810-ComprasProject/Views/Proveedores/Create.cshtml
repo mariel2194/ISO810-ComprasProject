@@ -4,9 +4,9 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Añadir</h1>
+<h1>Proveedores</h1>
 
-<h4>Proveedores</h4>
+<h4>Crear Proveedor</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,19 +14,20 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="TipoDocumento" class="control-label"></label>
-                <select asp-for="TipoDocumento" asp-items="ViewBag.TipoDocumento" class="form-control" id="tipoDocumento"></select>
+                <select asp-for="TipoDocumento" asp-items="ViewBag.TipoDocumento" class="form-control" id="tipoDocumento" ></select>
                 <span asp-validation-for="TipoDocumento" class="text-danger"></span>
             </div>
-            <div class="form-group" style="display:none;">
+            <div class="form-group">
                 <label asp-for="Cedula" class="control-label"></label>
-                <input asp-for="Cedula" class="form-control" id="cedula" name="Cedula" />
+                <input asp-for="Cedula" class="form-control" id="cedula" name="cedula" value="-" />
                 <span asp-validation-for="Cedula" class="text-danger"></span>
+
             </div>
             <div class="form-group" style="display:none;">
                 <label asp-for="RNC" class="control-label"></label>
-                <input asp-for="RNC" class="form-control" id="rnc" name="rnc
-" />
-                <span asp-validation-for="RNC" class="text-danger"></span>
+                <input asp-for="RNC" class="form-control" id="rnc" name="rnc" value="-" />
+                 <span asp-validation-for="RNC" class="text-danger"></span>
+
             </div>
             <div class="form-group">
                 <label asp-for="NombreComercial" class="control-label"></label>
@@ -52,19 +53,29 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
-        function mostrarCampos() {
-            var tipoDocumento = document.getElementById("tipoDocumento").value;
-            var cedula = document.getElementById("cedula");
-            var rnc = document.getElementById("rnc");
+    <script>
+        $(document).ready(function() {
+            function mostrarCampos() {
+                var tipoDocumento = document.getElementById("tipoDocumento").value;
+                var cedula = document.getElementById("cedula").parentElement;
+                var rnc = document.getElementById("rnc").parentElement;
 
-            if (tipoDocumento == "Cédula") {
-                cedula.style.display = "block";
-                rnc.style.display = "none";
-            } else if (tipoDocumento == "RNC") {
-                cedula.style.display = "none";
-                rnc.style.display = "block";
+                if (tipoDocumento === "Cédula") {
+                    cedula.style.display = "block";
+                    rnc.style.display = "none";
+                } else if (tipoDocumento === "RNC") {
+                    cedula.style.display = "none";
+                    rnc.style.display = "block";
+                } else {
+                    cedula.style.display = "none";
+                    rnc.style.display = "none";
+                }
+                $("#cedula, #rnc").valid();
             }
-        }
-      
+            mostrarCampos();
+            document.getElementById("tipoDocumento").addEventListener("change", mostrarCampos);
+        });
+    </script>
+
 
 }

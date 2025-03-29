@@ -6,21 +6,20 @@ namespace ISO810_ComprasProject.Models
 {
     public class Proveedores
     {
-        
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProveedorId { get; set; }
-
-        [Required(ErrorMessage = "El campo  es requerido")]
 
         [Display(Name = "Cédula")]
         [StringLength(14)]
         public string Cedula { get; set; }
 
         [Display(Name = "RNC")]
-        [StringLength(14)]
+        [StringLength(11)]
         public string RNC { get; set; }
-        public String TipoDocumento { get; set; }
+
+        [Display(Name = "Tipo de Documento")]
+        public string TipoDocumento { get; set; }
 
         [Required(ErrorMessage = "El nombre comercial es requerido.")]
         [Display(Name = "Nombre Comercial")]
@@ -28,10 +27,8 @@ namespace ISO810_ComprasProject.Models
         public string NombreComercial { get; set; }
 
         public bool Activo { get; set; }
-
-
     }
-   
-    
 
 }
+
+
