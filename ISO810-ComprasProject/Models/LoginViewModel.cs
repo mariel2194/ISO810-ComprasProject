@@ -6,6 +6,12 @@ namespace ISO810_ComprasProject.Models
 {
     public class LoginViewModel
     {
+
+
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int UserId { get; set; }
+
         [Required]
         [EmailAddress]
         public string Email { get; set; }

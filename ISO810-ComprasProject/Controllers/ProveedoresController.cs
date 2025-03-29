@@ -9,6 +9,7 @@ using ISO810_ComprasProject.Data;
 using ISO810_ComprasProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ISO810_ComprasProject.Controllers
 {
@@ -58,43 +59,37 @@ namespace ISO810_ComprasProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProveedorId,TipoDocumento,NumeroDocumento,NombreComercial,Activo")] Proveedores proveedores)
+        public async Task<IActionResult> Create([Bind("ProveedorId,TipoDocumento,Cedula,RNC,NombreComercial,Activo")] Proveedores proveedores)
         {
-            if (proveedores.TipoDocumento == "Cédula" && !validaCedula(proveedores.NumeroDocumento))
-            {
-                ModelState.AddModelError("NumeroDocumento", "La cédula ingresada no es válida.");
-            }
-            else if (proveedores.TipoDocumento == "RNC" && !esUnRNCValido(proveedores.NumeroDocumento))
-            {
-                ModelState.AddModelError("NumeroDocumento", "El RNC ingresado no es válido.");
-            }
 
-            if (!ModelState["NumeroDocumento"].Errors.Any())
+            if (proveedores.TipoDocumento == "Cédula")
             {
-                if (ModelState.IsValid)
+                proveedores.RNC = "N/A";
+                if (!validaCedula(proveedores.Cedula) || proveedores.Cedula.Length == 0)
                 {
-
-                    proveedores.Cedula = "0";
-                    proveedores.RNC = "0";
-                    _context.Add(proveedores);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-
+                    ModelState.AddModelError("Cedula", "Por digite una cédula válida ");
                 }
-                else if ((ModelState.ContainsKey("Cedula") && ModelState["Cedula"].Errors.Any()) || (ModelState.ContainsKey("RNC") && ModelState["RNC"].Errors.Any()))
+            }
+            else if (!esUnRNCValido(proveedores.RNC) || proveedores.RNC.Length == 0)
+            {
+                proveedores.Cedula = "N/A";
+                if (!esUnRNCValido(proveedores.RNC))
                 {
-                        proveedores.Cedula = "0";
-                        proveedores.RNC = "0";
-                        _context.Add(proveedores);
-                        await _context.SaveChangesAsync();
-                        return RedirectToAction(nameof(Index));
+                    ModelState.AddModelError("RNC", "Por digite digite un RNC válido.");
                 }
+            }
 
+            if (ModelState.IsValid)
+            {
+                _context.Add(proveedores);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
 
             ViewBag.TipoDocumento = new SelectList(new[] { "Cédula", "RNC" }, proveedores.TipoDocumento);
             return View(proveedores);
         }
+
 
         // GET: Proveedores/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -118,76 +113,7 @@ namespace ISO810_ComprasProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProveedorId,TipoDocumento,NumeroDocumento,NombreComercial,Activo")] Proveedores proveedores)
-        {
-            if (id != proveedores.ProveedorId)
-            {
-                return NotFound();
-            }
-
-            if (proveedores.TipoDocumento == "Cédula" && !validaCedula(proveedores.NumeroDocumento))
-            {
-                ModelState.AddModelError("NumeroDocumento", "La cédula ingresada no es válida.");
-            }
-            else if (proveedores.TipoDocumento == "RNC" && !esUnRNCValido(proveedores.NumeroDocumento))
-            {
-                ModelState.AddModelError("NumeroDocumento", "El RNC ingresado no es válido.");
-            }
-
-            if (!ModelState["NumeroDocumento"].Errors.Any()) {
-                if (ModelState.IsValid)
-                {
-                    try
-                    {
-
-                        proveedores.Cedula = "0";
-                        proveedores.RNC = "0";
-                        _context.Update(proveedores);
-                        await _context.SaveChangesAsync();
-                        return RedirectToAction(nameof(Index));
-
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!ProveedoresExists(proveedores.ProveedorId))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                }
-                else if ((ModelState.ContainsKey("Cedula") && ModelState["Cedula"].Errors.Any()) || (ModelState.ContainsKey("RNC") && ModelState["RNC"].Errors.Any()))
-                {
-
-                    try
-                    {
-                        proveedores.Cedula = "0";
-                        proveedores.RNC = "0";
-                        _context.Update(proveedores);
-                        await _context.SaveChangesAsync();
-                        return RedirectToAction(nameof(Index));
-
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!ProveedoresExists(proveedores.ProveedorId))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
-                }
-            }
-
-            ViewBag.TipoDocumento = new SelectList(new[] { "Cédula", "RNC" }, proveedores.TipoDocumento);
-            return View(proveedores);
-        }
+        
 
         // GET: Proveedores/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -229,46 +155,31 @@ namespace ISO810_ComprasProject.Controllers
 
         private bool esUnRNCValido(string pRNC)
         {
+            if (string.IsNullOrWhiteSpace(pRNC)) return false;
 
             int vnTotal = 0;
-
             int[] digitoMult = new int[8] { 7, 9, 8, 6, 5, 4, 3, 2 };
 
             string vcRNC = pRNC.Replace("-", "").Replace(" ", "");
 
-            string vDigito = vcRNC.Substring(8, 1);
+            if (vcRNC.Length != 9) return false;
+            if (vcRNC[0] != '1' && vcRNC[0] != '4' && vcRNC[0] != '5') return false;
 
-            if (vcRNC.Length.Equals(9))
+            if (!int.TryParse(vcRNC.Substring(8, 1), out int vDigito)) return false;
 
-                if (!"145".Contains(vcRNC.Substring(0, 1)))
-
-                    return false;
-
-
-
-            for (int vDig = 1; vDig <= 8; vDig++)
-
+            for (int vDig = 0; vDig < 8; vDig++)
             {
-
-                int vCalculo = Int32.Parse(vcRNC.Substring(vDig - 1, 1)) * digitoMult[vDig - 1];
-
-                vnTotal += vCalculo;
-
+                if (!int.TryParse(vcRNC[vDig].ToString(), out int vNumero)) return false;
+                vnTotal += vNumero * digitoMult[vDig];
             }
 
+            int residuo = vnTotal % 11;
+            int digitoCalculado = (residuo == 0 || residuo == 1) ? 0 : (11 - residuo);
 
-
-            if (vnTotal % 11 == 0 && vDigito == "1" || vnTotal % 11 == 1 && vDigito == "1" ||
-
-                (11 - (vnTotal % 11)).Equals(vDigito))
-
-                return true;
-
-            else
-
-                return false;
-
+            return vDigito == digitoCalculado;
         }
+
+
 
         private static bool validaCedula(string pCedula)
 

@@ -7,6 +7,11 @@ namespace ISO810_ComprasProject.Models
     public class RegisterViewModel
     {
 
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int RegistroId { get; set; }
+
+
         [Required]
         [StringLength(50)]
         [Display(Name = "Nombre")]

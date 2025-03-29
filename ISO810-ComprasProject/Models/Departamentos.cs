@@ -9,8 +9,7 @@ namespace ISO810_ComprasProject.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int DepartamentoId { get; set; }
 
-        [Required]
-        [Display(Name = "Nombre")]
+        [Required(ErrorMessage = "El campo nombre es requerido")]
         [StringLength(14)]
         public string Nombre { get; set; }
 

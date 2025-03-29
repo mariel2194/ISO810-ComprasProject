@@ -7,7 +7,7 @@
 <h1>Orden de Compras</h1>
 
 <p>
-    <a asp-action="Create">Crear Nuevo</a>
+    <a asp-action="Create">Crear Orden</a>
 </p>
 
 @if (TempData["ErrorMessage"] != null)
@@ -27,7 +27,13 @@
                 @Html.DisplayNameFor(model => model.Articulo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Cantidad)
+                @Html.DisplayNameFor(model => model.Articulo.CostoUnitario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Monto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Monto)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.UnidadMedida)
@@ -48,8 +54,15 @@
                 @Html.DisplayFor(modelItem => item.Articulo.Descripcion)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Articulo.CostoUnitario)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Cantidad)
             </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Monto)
+            </td>
+           
             <td>
                 @Html.DisplayFor(modelItem => item.UnidadMedida.Descripcion)
             </td>

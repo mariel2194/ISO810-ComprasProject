@@ -4,6 +4,7 @@ using ISO810_ComprasProject.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ISO810_ComprasProject.Migrations
 {
     [DbContext(typeof(ComprasDBContext))]
-    partial class ComprasDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250323144930_AddedLoginModel")]
+    partial class AddedLoginModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,9 +129,6 @@ namespace ISO810_ComprasProject.Migrations
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
-
-                    b.Property<double>("Monto")
-                        .HasColumnType("float");
 
                     b.Property<int>("UnidadMedidaId")
                         .HasColumnType("int");
