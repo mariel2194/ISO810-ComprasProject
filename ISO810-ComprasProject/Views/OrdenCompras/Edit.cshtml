@@ -25,9 +25,10 @@
                 <span asp-validation-for="ArticuloId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Articulo.CostoUnitario" class="control-label"></label>
-                <input asp-for="Articulo.CostoUnitario" class="form-control" />
+                <label class="control-label">Costo Unitario</label>
+                <input id="CostoUnitario" class="form-control" asp-for="Articulo.CostoUnitario" readonly name="Articulo.CostoUnitario" />
                 <span asp-validation-for="Articulo.CostoUnitario" class="text-danger"></span>
+
             </div>
             <div class="form-group">
                 <label asp-for="Cantidad" class="control-label"></label>
@@ -35,9 +36,10 @@
                 <span asp-validation-for="Cantidad" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Monto" class="control-label"></label>
-                <input asp-for="Monto" class="form-control" readonly />
+                <label class="control-label">Costo Total</label>
+                <input id="Monto" asp-for="Monto" class="form-control" readonly />
                 <span asp-validation-for="Monto" class="text-danger"></span>
+
             </div>
             <div class="form-group">
                 <label asp-for="UnidadMedidaId" class="control-label">Unidad de Medida</label>
@@ -62,4 +64,33 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function() {
+            var articulos = @Html.Raw(Json.Serialize(ViewBag.Articulos));
+            function updateMonto() {
+                var costoUnitario = parseFloat($('#CostoUnitario').val()) || 0;
+                var cantidad = parseFloat($('#Cantidad').val()) || 0;
+                var monto = costoUnitario * cantidad;
+                $('#Monto').val(monto.toFixed(2));
+            }
+
+            $('#ArticuloId').change(function() {
+                var selectedArticuloId = $(this).val();
+                var articulo = articulos.find(a => a.articuloId == parseInt(selectedArticuloId));
+
+                if (articulo) {
+                    $('#CostoUnitario').val(articulo.costoUnitario);
+                } else {
+                    $('#CostoUnitario').val('');
+                }
+                updateMonto();
+            });
+
+            $('#Cantidad').on('input', function() {
+                updateMonto();
+            });
+
+            $('#ArticuloId').trigger('change');
+        });
+    </script>
 }
