@@ -14,7 +14,7 @@ namespace ISO810_ComprasProject.Models
 
         [Display(Name = "Descripcion")]
         [StringLength(50)]
-        [Required]
+        [Required(ErrorMessage = "El campo descripción es requerido")]
         public string Descripcion { get; set; }
                 
         public bool Activo { get; set; }
