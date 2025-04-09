@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <partial name="cp/_Meta"/>
+    <!-- PAGE TITLE HERE -->
+    <title>[@ViewBag.Title] cp Customer Relationship Management</title>
+    <!-- FAVICONS ICON -->
+    <link rel="shortcut icon" type="image/png" href="~/cp/images/favicon.png">
+    @RenderSection("cp_style", false)
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+    <link href="~/cp/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="~/cp/css/style.css" rel="stylesheet">
+</head>
+<body data-typography="poppins" data-theme-version="light" data-layout="vertical" data-nav-headerbg="black" data-headerbg="color_1">
+    <partial name="cp/_PreLoader" />
+    <div id="main-wrapper">
+        <partial name="cp/_NavHeader" />
+        <partial name="cp/_ChatBox" />
+        <partial name="cp/_Header" />
+        <partial name="cp/_Sidebar" />
+        @RenderBody()  
+        <partial name="cp/_AddEmployee" />
+        <partial name="cp/_AddNewTask" />
+        <partial name="cp/_AddAttendance" />
+        <partial name="cp/_InviteEmployee" />
+        <partial name="cp/_EditProfile" />
+        <partial name="cp/_AddPrompt" />
+        <partial name="cp/_JobTitle" />
+        <partial name="cp/_Footer" />
+    </div>
+
+    @RenderSection("cp_script", false)
+    @RenderSection("Scripts", false)
+</body>
+</html>
