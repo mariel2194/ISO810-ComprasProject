@@ -4,6 +4,7 @@ using ISO810_ComprasProject.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ISO810_ComprasProject.Migrations
 {
     [DbContext(typeof(ComprasDBContext))]
-    partial class ComprasDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250322023607_CleanupModels")]
+    partial class CleanupModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,27 +89,6 @@ namespace ISO810_ComprasProject.Migrations
                     b.ToTable("Departamento");
                 });
 
-            modelBuilder.Entity("ISO810_ComprasProject.Models.LoginViewModel", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("Login");
-                });
-
             modelBuilder.Entity("ISO810_ComprasProject.Models.OrdenCompras", b =>
                 {
                     b.Property<int>("CompraId")
@@ -126,9 +108,6 @@ namespace ISO810_ComprasProject.Migrations
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
-
-                    b.Property<double>("Monto")
-                        .HasColumnType("float");
 
                     b.Property<int>("UnidadMedidaId")
                         .HasColumnType("int");
@@ -183,41 +162,6 @@ namespace ISO810_ComprasProject.Migrations
                         .IsUnique();
 
                     b.ToTable("Proveedor");
-                });
-
-            modelBuilder.Entity("ISO810_ComprasProject.Models.RegisterViewModel", b =>
-                {
-                    b.Property<int>("RegistroId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RegistroId"));
-
-                    b.Property<string>("Apellido")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("ConfirmarPassword")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("RegistroId");
-
-                    b.ToTable("Registro");
                 });
 
             modelBuilder.Entity("ISO810_ComprasProject.Models.UnidadesMedida", b =>

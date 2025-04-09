@@ -3,10 +3,10 @@
 @{
     ViewData["Title"] = "Create";
 }
+<h1>Orden de Compras</h1>
 
-<h1>Añadir</h1>
+<h3>Crear Orden</h3>
 
-<h4>Orden de Compras</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -18,9 +18,15 @@
                 <span asp-validation-for="Fecha" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Articulo</label>
-                <select asp-for="ArticuloId" class ="form-control" asp-items="ViewBag.ArticuloId"></select>
+                <label class="control-label">Artículo</label>
+                <select id="ArticuloId" asp-for="ArticuloId" class="form-control" asp-items="ViewBag.ArticuloId"></select>
                 <span asp-validation-for="ArticuloId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Costo Unitario</label>
+                <input id="CostoUnitario" class="form-control" asp-for="Articulo.CostoUnitario" readonly name="Articulo.CostoUnitario" />
+                <span asp-validation-for="Articulo.CostoUnitario" class="text-danger"></span>
+
             </div>
             <div class="form-group">
                 <label asp-for="Cantidad" class="control-label"></label>
@@ -28,7 +34,13 @@
                 <span asp-validation-for="Cantidad" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UnidadMedidaId" class="control-label"></label>
+                <label class="control-label">Costo Total</label>
+                <input id="Monto" asp-for="Monto" class="form-control" readonly />
+                <span asp-validation-for="Monto" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label asp-for="UnidadMedidaId" class="control-label">Unidad de Medida</label>
                 <select asp-for="UnidadMedidaId" class ="form-control" asp-items="ViewBag.UnidadMedidaId"></select>
             </div>
             <div class="form-group">
@@ -46,9 +58,40 @@
 <div>
     <a asp-action="Index">Volver</a>
 </div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function() {
+            var articulos = @Html.Raw(Json.Serialize(ViewBag.Articulos));
+            function updateMonto() {
+                var costoUnitario = parseFloat($('#CostoUnitario').val()) || 0;
+                var cantidad = parseFloat($('#Cantidad').val()) || 0;
+                var monto = costoUnitario * cantidad;
+                $('#Monto').val(monto.toFixed(2)); 
+            }
+
+            $('#ArticuloId').change(function() {
+                var selectedArticuloId = $(this).val();
+                var articulo = articulos.find(a => a.articuloId == parseInt(selectedArticuloId));
+
+                if (articulo) {
+                    $('#CostoUnitario').val(articulo.costoUnitario);
+                } else {
+                    $('#CostoUnitario').val('');
+                }
+                updateMonto(); 
+            });
+
+            $('#Cantidad').on('input', function() {
+                updateMonto();
+            });
+
+            $('#ArticuloId').trigger('change'); 
+        });
+    </script>
 }
 
 @section cp_style
