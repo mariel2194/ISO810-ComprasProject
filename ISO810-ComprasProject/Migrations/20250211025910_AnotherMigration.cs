@@ -15,10 +15,7 @@ namespace ISO810_ComprasProject.Migrations
                 table: "Proveedor",
                 newName: "ProveedorId");
 
-            migrationBuilder.RenameColumn(
-                name: "departamentoId",
-                table: "Departamento",
-                newName: "DepartamentoId");
+          
         }
 
         /// <inheritdoc />
@@ -29,10 +26,7 @@ namespace ISO810_ComprasProject.Migrations
                 table: "Proveedor",
                 newName: "proveedorId");
 
-            migrationBuilder.RenameColumn(
-                name: "DepartamentoId",
-                table: "Departamento",
-                newName: "departamentoId");
+         
         }
     }
 }

@@ -51,7 +51,7 @@ namespace ISO810_ComprasProject.Controllers
         public IActionResult Create()
         {
             ViewBag.TipoDocumento = new SelectList(new[] { "Cédula", "RNC" });
-            return View();
+            return View(new Proveedores());
         }
 
         // POST: Proveedores/Create

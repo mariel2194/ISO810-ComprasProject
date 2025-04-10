@@ -48,7 +48,7 @@ namespace ISO810_ComprasProject.Controllers
         // GET: UnidadesMedida/Create
         public IActionResult Create()
         {
-            return View();
+            return View(new UnidadesMedida());
         }
 
         // POST: UnidadesMedida/Create
