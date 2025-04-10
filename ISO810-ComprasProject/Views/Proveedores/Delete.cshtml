@@ -4,49 +4,80 @@
     ViewData["Title"] = "Delete";
 }
 
+<div class="content-body">
+    <div class="page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-action="Index">
+                    <i class="fas fa-truck"></i>
+                    Proveedores
+                </a>
+            </li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Eliminar</a></li>
+        </ol>
+    </div>
+    <div class="container-fluid">
+        <div class="d-flex justify-content-end align-items-center mb-4">
+            <div class="d-flex align-items-center">
+                <a asp-action="Index" class="btn btn-info btn-sm ms-2"> <i class="fa fa-arrow-left"></i> Volver</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <dl class="row">
 
-<h3>¿Seguro desea eliminar este Proveedor?</h3>
-<div>
-    <h4>Proveedores</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TipoDocumento)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TipoDocumento)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cedula)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cedula)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.RNC)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.RNC)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NombreComercial)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NombreComercial)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Activo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Activo)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="ProveedorId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Volver</a>
-    </form>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.TipoDocumento)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.TipoDocumento)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Cedula)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Cedula)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.RNC)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.RNC)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.NombreComercial)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.NombreComercial)
+                            </dd>
+                            <dt class="col-sm-2">
+                                Estatus
+                            </dt>
+                            <dd class="col-sm-10">
+                                @if (Model.Activo)
+                                {
+                                    <span class="">Activo</span>
+                                }
+                                else
+                                {
+                                    <span class="">Inactivo</span>
+                                }
+                            </dd>
+                        </dl>
+                        <div class="d-flex justify-content-end">
+                            <form asp-action="Delete">
+                                <input type="hidden" asp-for="ProveedorId" />
+                                <input type="submit" value="Eliminar" class="btn btn-danger justify-content-end" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 @section cp_style
@@ -80,5 +111,5 @@
     <script src="~/cp/js/custom.js"></script>
     <script src="~/cp/js/deznav-init.js"></script>
     <script src="~/cp/js/demo.js"></script>
-    <script src="~/cp/js/styleSwitcher.js"></script>
+@*     <script src="~/cp/js/styleSwitcher.js"></script> *@
     }

@@ -48,7 +48,7 @@ namespace ISO810_ComprasProject.Controllers
         // GET: Departamentos/Create
         public IActionResult Create()
         {
-            return View();
+            return View(new Departamentos());
         }
 
         // POST: Departamentos/Create

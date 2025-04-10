@@ -51,7 +51,7 @@ namespace ISO810_ComprasProject.Controllers
         public IActionResult Create()
         {
             ViewData["UnidadMedidaId"] = new SelectList(_context.UnidadMedida, "UnidadMedidaId", "Descripcion");
-            return View();
+            return View(new Articulos());
         }
 
         // POST: Articulos/Create

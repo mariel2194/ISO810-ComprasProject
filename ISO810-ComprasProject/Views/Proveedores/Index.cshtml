@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a href="javascript:void(0)">
-                    <i class="fas fa-balance-scale"></i>
+                    <i class="fas fa-truck"></i>
                     Proveedores
                 </a>
             </li>
@@ -32,7 +32,10 @@
                                         @Html.DisplayNameFor(model => model.TipoDocumento)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(model => model.NumeroDocumento)
+                                        @Html.DisplayNameFor(model => model.Cedula)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.RNC)
                                     </th>
                                     <th>
                                         @Html.DisplayNameFor(model => model.NombreComercial)
@@ -51,7 +54,10 @@
                                             @Html.DisplayFor(modelItem => item.TipoDocumento)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.NumeroDocumento)
+                                            @Html.DisplayFor(modelItem => item.Cedula)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.RNC)
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.NombreComercial)
@@ -115,5 +121,5 @@
     <script src="~/cp/js/custom.js"></script>
     <script src="~/cp/js/deznav-init.js"></script>
     <script src="~/cp/js/demo.js"></script>
-    <script src="~/cp/js/styleSwitcher.js"></script>
+   @*  <script src="~/cp/js/styleSwitcher.js"></script> *@
     }

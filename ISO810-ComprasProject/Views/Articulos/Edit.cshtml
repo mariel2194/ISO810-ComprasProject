@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <a asp-action="Index">
-                    <i class="fas fa-balance-scale"></i>
+                    <i class="fas fa-box"></i>
                     Articulos
                 </a>
             </li>
@@ -42,20 +42,18 @@
                                         <input asp-for="Marca" class="form-control" />
                                         <span asp-validation-for="Marca" class="text-danger"></span>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label asp-for="UnidadMedidaId" class="control-label"></label>
                                         <select asp-for="UnidadMedidaId" class="form-control" asp-items="ViewBag.UnidadMedidaId"></select>
                                         <span asp-validation-for="UnidadMedidaId" class="text-danger"></span>
                                     </div>
+                                </div>
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label asp-for="CostoUnitario" class="control-label"></label>
                                         <input asp-for="CostoUnitario" class="form-control" />
                                         <span asp-validation-for="CostoUnitario" class="text-danger"></span>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label asp-for="Stock" class="control-label"></label>
                                         <input asp-for="Stock" class="form-control" />
@@ -132,5 +130,5 @@
     <script src="~/cp/js/custom.js"></script>
     <script src="~/cp/js/deznav-init.js"></script>
     <script src="~/cp/js/demo.js"></script>
-    <script src="~/cp/js/styleSwitcher.js"></script>
+@*     <script src="~/cp/js/styleSwitcher.js"></script> *@
     }

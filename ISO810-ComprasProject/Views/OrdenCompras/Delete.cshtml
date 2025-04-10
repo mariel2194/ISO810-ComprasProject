@@ -4,59 +4,85 @@
     ViewData["Title"] = "Delete";
 }
 
-<h3>¿Seguro desea eliminar esta orden?</h3>
-<div>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Fecha)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Fecha)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Articulo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Articulo.Descripcion)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Articulo.CostoUnitario)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Articulo.CostoUnitario)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cantidad)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cantidad)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Monto)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Monto)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UnidadMedida)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UnidadMedida.Descripcion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Estado)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Estado)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="CompraId" />
-        <input type="submit" value="Borrar" class="btn btn-danger" /> |
-        <a asp-action="Index">Volver</a>
-    </form>
+<div class="content-body">
+    <div class="page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a asp-action="Index">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    Ordenes de Compra
+                </a>
+            </li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Eliminar</a></li>
+        </ol>
+    </div>
+    <div class="container-fluid">
+        <div class="d-flex justify-content-end align-items-center mb-4">
+            <div class="d-flex align-items-center">
+                <a asp-action="Index" class="btn btn-info btn-sm ms-2"> <i class="fa fa-arrow-left"></i> Volver</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <dl class="row">
+
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Fecha)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Fecha)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Articulo)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Articulo.Descripcion)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Articulo.CostoUnitario)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Articulo.CostoUnitario)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Cantidad)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Cantidad)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Monto)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Monto)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.UnidadMedida)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.UnidadMedida.Descripcion)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => model.Estado)
+                            </dt>
+                            <dd class="col-sm-10">
+                                @Html.DisplayFor(model => model.Estado)
+                            </dd>
+                        </dl>
+                        <div class="d-flex justify-content-end">
+                            <form asp-action="Delete">
+                                <input type="hidden" asp-for="CompraId" />
+                                <input type="submit" value="Eliminar" class="btn btn-danger justify-content-end" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 @section cp_style
@@ -90,5 +116,5 @@
     <script src="~/cp/js/custom.js"></script>
     <script src="~/cp/js/deznav-init.js"></script>
     <script src="~/cp/js/demo.js"></script>
-    <script src="~/cp/js/styleSwitcher.js"></script>
+  @*   <script src="~/cp/js/styleSwitcher.js"></script> *@
     }
