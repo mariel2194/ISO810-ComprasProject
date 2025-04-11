@@ -108,12 +108,58 @@ namespace ISO810_ComprasProject.Controllers
             return View(proveedores);
         }
 
-        // POST: Proveedores/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
+        public async Task<IActionResult> Edit(int id, [Bind("ProveedorId,TipoDocumento,Cedula,RNC,NombreComercial,Activo")] Proveedores proveedores)
+        {
+            if (id != proveedores.ProveedorId)
+            {
+                return NotFound();
+            }
+
+            if (proveedores.TipoDocumento == "Cédula")
+            {
+                proveedores.RNC = "N/A";
+                if (string.IsNullOrWhiteSpace(proveedores.Cedula) || !validaCedula(proveedores.Cedula))
+                {
+                    ModelState.AddModelError("Cedula", "Por favor digite una cédula válida.");
+                }
+            }
+            else
+            {
+                proveedores.Cedula = "N/A";
+                if (string.IsNullOrWhiteSpace(proveedores.RNC) || !esUnRNCValido(proveedores.RNC))
+                {
+                    ModelState.AddModelError("RNC", "Por favor digite un RNC válido.");
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.TipoDocumento = new SelectList(new[] { "Cédula", "RNC" }, proveedores.TipoDocumento);
+                return View(proveedores);
+            }
+
+            try
+            {
+                _context.Update(proveedores);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProveedoresExists(proveedores.ProveedorId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
 
         // GET: Proveedores/Delete/5
         public async Task<IActionResult> Delete(int? id)

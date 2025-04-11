@@ -39,7 +39,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label asp-for="TipoDocumento" class="control-label"></label>
-                                        <select asp-for="TipoDocumento" asp-items="ViewBag.TipoDocumento" class="form-control"></select>
+                                        <select asp-for="TipoDocumento" asp-items="ViewBag.TipoDocumento" class="form-control" id="tipoDocumento"></select>
                                         <span asp-validation-for="TipoDocumento" class="text-danger"></span>
                                     </div>
 
@@ -99,6 +99,29 @@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script>
+            $(document).ready(function() {
+                function mostrarCampos() {
+                    var tipoDocumento = document.getElementById("tipoDocumento").value;
+                    var cedula = document.getElementById("cedula").parentElement;
+                    var rnc = document.getElementById("rnc").parentElement;
+
+                    if (tipoDocumento === "Cédula") {
+                        cedula.style.display = "block";
+                        rnc.style.display = "none";
+                    } else if (tipoDocumento === "RNC") {
+                        cedula.style.display = "none";
+                        rnc.style.display = "block";
+                    } else {
+                        cedula.style.display = "none";
+                        rnc.style.display = "none";
+                    }
+                    $("#cedula, #rnc").valid();
+                }
+                mostrarCampos();
+                document.getElementById("tipoDocumento").addEventListener("change", mostrarCampos);
+            });
+        </script>
 
     }
 
