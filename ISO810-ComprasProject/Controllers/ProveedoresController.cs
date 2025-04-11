@@ -64,20 +64,28 @@ namespace ISO810_ComprasProject.Controllers
 
             if (proveedores.TipoDocumento == "Cédula")
             {
+                ModelState.Remove("RNC");
                 proveedores.RNC = "N/A";
                 if (!validaCedula(proveedores.Cedula) || proveedores.Cedula.Length == 0)
                 {
-                    ModelState.AddModelError("Cedula", "Por digite una cédula válida ");
+                    ModelState.AddModelError("Cedula", "Por favor digite una cédula válida ");
                 }
             }
-            else if (!esUnRNCValido(proveedores.RNC) || proveedores.RNC.Length == 0)
+            else
             {
+                ModelState.Remove("Cedula");
                 proveedores.Cedula = "N/A";
-                if (!esUnRNCValido(proveedores.RNC))
+
+                if (!esUnRNCValido(proveedores.RNC) || proveedores.RNC.Length == 0)
                 {
-                    ModelState.AddModelError("RNC", "Por digite digite un RNC válido.");
+                    ModelState.AddModelError("RNC", "Por favor digite  un RNC válido.");
                 }
             }
+            if (_context.Proveedor.Any(p => p.NombreComercial == proveedores.NombreComercial))
+            {
+                ModelState.AddModelError("NombreComercial", "Ya existe un proveedor con este nombre comercial.");
+            }
+
 
             if (ModelState.IsValid)
             {
@@ -119,20 +127,24 @@ namespace ISO810_ComprasProject.Controllers
 
             if (proveedores.TipoDocumento == "Cédula")
             {
+                ModelState.Remove("RNC");
                 proveedores.RNC = "N/A";
-                if (string.IsNullOrWhiteSpace(proveedores.Cedula) || !validaCedula(proveedores.Cedula))
+                if (!validaCedula(proveedores.Cedula) || proveedores.Cedula.Length == 0)
                 {
-                    ModelState.AddModelError("Cedula", "Por favor digite una cédula válida.");
+                    ModelState.AddModelError("Cedula", "Por favor digite una cédula válida ");
                 }
             }
             else
             {
+                ModelState.Remove("Cedula");
                 proveedores.Cedula = "N/A";
-                if (string.IsNullOrWhiteSpace(proveedores.RNC) || !esUnRNCValido(proveedores.RNC))
+
+                if (!esUnRNCValido(proveedores.RNC) || proveedores.RNC.Length == 0)
                 {
-                    ModelState.AddModelError("RNC", "Por favor digite un RNC válido.");
+                    ModelState.AddModelError("RNC", "Por favor digite  un RNC válido.");
                 }
             }
+            
 
             if (!ModelState.IsValid)
             {
