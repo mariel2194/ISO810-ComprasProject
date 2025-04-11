@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,6 +25,7 @@ namespace ISO810_ComprasProject.Models
 
         [Display(Name = "Unidad de Medida")]
         [ForeignKey("UnidadMedidaId")]
+        [ValidateNever]
         public virtual UnidadesMedida UnidadMedida { get; set; }
 
         [Required(ErrorMessage = "El costo unitario es requerido")]
