@@ -48,6 +48,12 @@
                                         @Html.DisplayNameFor(model => model.UnidadMedida)
                                     </th>
                                     <th>
+                                        @Html.DisplayNameFor(model => model.Articulo.CostoUnitario)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Monto)
+                                    </th>
+                                    <th>
                                         @Html.DisplayNameFor(model => model.Estado)
                                     </th>
                                     <th></th>
@@ -68,6 +74,12 @@
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.UnidadMedida.Descripcion)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Articulo.CostoUnitario)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Monto)
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Estado)
