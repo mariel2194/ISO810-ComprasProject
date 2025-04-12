@@ -4,12 +4,6 @@
     ViewData["Title"] = "Index";
 }
 
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">
-        @TempData["ErrorMessage"]
-    </div>
-}
 
 <div class="content-body">
     <div class="page-titles">
@@ -32,6 +26,15 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-body">
+                        @if (TempData["ErrorMessage"] != null)
+                        {
+                            <div class="alert alert-danger">
+                                @TempData["ErrorMessage"]
+                            </div>
+                        }
+                        <div class="alert alert-warning mb-0">
+                            <strong>Atención:</strong> Cuando se establece el estado en Completado, el sistema registra de forma automática la transacción vinculada a la orden.
+                        </div>
                         <table class="table">
                             <thead>
                                 <tr>

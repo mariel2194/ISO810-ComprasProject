@@ -4,9 +4,14 @@ using Microsoft.AspNetCore.Identity;
 using ISO810_ComprasProject.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ISO810_ComprasProject.Controllers;
+using ISO810_ComprasProject.Services;
+using ISO810_ComprasProject.Services.Models;
+using Microsoft.Extensions.Options;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+var configuration = builder.Configuration;
 
 // Configure Connection String 
 builder.Services.AddDbContext<ComprasDBContext>(options =>
@@ -28,6 +33,13 @@ builder.Services.AddIdentity<Users, IdentityRole>()
     .AddDefaultTokenProviders();
 
 
+builder.Services.AddHttpClient<ContabilidadAuthService>();
+builder.Services.AddHttpClient<ContabilidadApiService>();
+
+builder.Services.Configure<ContabilidadConfig>(builder.Configuration.GetSection("ContabilidadAPI"));
+
+builder.Services.AddSingleton(sp =>
+    sp.GetRequiredService<IOptions<ContabilidadConfig>>().Value);
 
 
 // Add services to the container.

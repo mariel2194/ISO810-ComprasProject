@@ -60,31 +60,38 @@ namespace ISO810_ComprasProject.Controllers
             return View();
         }
 
-
-        // POST: OrdenCompras/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CompraId,Fecha,ArticuloId,Cantidad,Monto,UnidadMedidaId,Estado")] OrdenCompras ordenCompras)
         {
             if (ModelState.IsValid)
             {
+
                 _context.Add(ordenCompras);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            else if (ModelState.ContainsKey("Articulo") && ModelState["Articulo"].Errors.Any())
-            {
-                _context.Add(ordenCompras);
+                if (ordenCompras.Estado == EstadoCompra.Completada)
+                {
+                    // crear la transacción
+                    var transaccion = new Transaccion
+                    {
+                        Descripcion = $"Orden #{ordenCompras.CompraId} completada",
+                        Fecha = DateTime.Now,
+                        Monto = (decimal)ordenCompras.Monto,
+                        AsientoId = null,
+                        FechaAsiento = null
+                    };
+
+                    ordenCompras.Transaccion = transaccion;
+                }
+             
+                _context.Update(ordenCompras);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["ArticuloId"] = new SelectList(_context.Articulo, "ArticuloId", "Descripcion", ordenCompras.ArticuloId);
-            ViewData["UnidadMedidaId"] = new SelectList(_context.UnidadMedida, "UnidadMedidaId", "Descripcion", ordenCompras.UnidadMedidaId);
             return View(ordenCompras);
         }
+
 
         // GET: OrdenCompras/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -118,8 +125,30 @@ namespace ISO810_ComprasProject.Controllers
 
             if (ModelState.IsValid)
             {
+                var ordenComprasOld = _context.OrdenCompra.AsNoTracking().FirstOrDefault(d=>d.CompraId == ordenCompras.CompraId);
+
+                if (ordenComprasOld.Estado == EstadoCompra.Completada)
+                {
+                    TempData["ErrorMessage"] = "No es posible editar la orden de compra en estado completado. Ya fue creada la transaccion.";
+                }
+
                 try
                 {
+                    if (ordenCompras.Estado == EstadoCompra.Completada)
+                    {
+                        // crear la transacción
+                        var transaccion = new Transaccion
+                        {
+                            Descripcion = $"Orden #{ordenCompras.CompraId} completada",
+                            Fecha = DateTime.Now,
+                            Monto = (decimal)ordenCompras.Monto,
+                            AsientoId = null,
+                            FechaAsiento = null
+                        };
+
+                        ordenCompras.Transaccion = transaccion;
+                    }
+
                     _context.Update(ordenCompras);
                     await _context.SaveChangesAsync();
                 }
@@ -136,26 +165,7 @@ namespace ISO810_ComprasProject.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            else if (ModelState.ContainsKey("Articulo") && ModelState["Articulo"].Errors.Any())
-            {
-                try
-                {
-                    _context.Update(ordenCompras);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!OrdenComprasExists(ordenCompras.CompraId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
+           
             ViewData["ArticuloId"] = new SelectList(_context.Articulo, "ArticuloId", "Descripcion", ordenCompras.ArticuloId);
             ViewData["UnidadMedidaId"] = new SelectList(_context.UnidadMedida, "UnidadMedidaId", "Descripcion", ordenCompras.UnidadMedidaId);
             return View(ordenCompras);
@@ -191,6 +201,13 @@ namespace ISO810_ComprasProject.Controllers
             try
             {
                 var ordenCompras = await _context.OrdenCompra.FindAsync(id);
+
+                if (ordenCompras.Estado == EstadoCompra.Completada)
+                {
+                    TempData["ErrorMessage"] = "No es posible elimnar la orden de compra en estado completado. Ya fue creada la transaccion.";
+                    return RedirectToAction(nameof(Index));
+                }
+
                 if (ordenCompras != null)
                 {
                     _context.OrdenCompra.Remove(ordenCompras);

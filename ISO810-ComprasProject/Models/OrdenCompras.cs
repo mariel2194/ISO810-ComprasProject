@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,6 +20,7 @@ namespace ISO810_ComprasProject.Models
 
         [ForeignKey("ArticuloId")]
         [Display(Name = "Artículo")]
+        [ValidateNever]
         public virtual Articulos Articulo { get; set; }
 
         [Required(ErrorMessage = "La cantidad es requerida")]
@@ -29,6 +31,7 @@ namespace ISO810_ComprasProject.Models
 
         [ForeignKey("UnidadMedidaId")]
         [Display(Name = "Unidad de Medida")]
+        [ValidateNever]
         public virtual UnidadesMedida UnidadMedida { get; set; }
 
 
@@ -37,6 +40,11 @@ namespace ISO810_ComprasProject.Models
 
         [Display(Name = "Estado")]
         public EstadoCompra Estado { get; set; } = EstadoCompra.Pendiente;
+
+        public int? TransaccionId { get; set; }
+
+        [ValidateNever]
+        public virtual Transaccion Transaccion { get; set; }
 
 
     }
