@@ -1,0 +1,138 @@
+﻿@model ISO810_ComprasProject.Models.TransaccionFiltroViewModel
+
+@{
+    ViewData["Title"] = "Transacciones";
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+
+
+<div class="content-body">
+    <div class="page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0)">
+                    <i class="fas fa-university"></i>
+                    Transacciones
+                </a>
+            </li>
+        </ol>
+    </div>
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        @if (TempData["ProcesoMensaje"] != null)
+                        {
+                            <div id="procesoMsg" class="alert alert-info fixed-top w-50 mx-auto mt-3 text-center shadow">
+                                @TempData["ProcesoMensaje"]
+                            </div>
+                        }
+                        <div class="justify-content-end">
+                            <div class="justify-content-end mb-4">
+                                <form asp-action="Index" method="post" class="row g-3 mb-4">
+                                    @Html.AntiForgeryToken()
+                                    <div class="col-md-3">
+                                        <label class="form-label">Desde:</label>
+                                        <input type="date" name="desde" value="@Model.Desde?.ToString("yyyy-MM-dd")" class="form-control" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Hasta:</label>
+                                        <input type="date" name="hasta" value="@Model.Hasta?.ToString("yyyy-MM-dd")" class="form-control" />
+                                    </div>
+                                    <div class="col-md-3 align-self-end">
+                                        <button type="submit" class="btn btn-primary">Filtrar</button>
+                                        <a asp-action="Contabilizar" asp-controller="Transacciones" asp-route-ids="@string.Join(",", Model.Transacciones.Select(x=> x.TransaccionId))"  class="btn btn-warning">Contabilizar</a>
+                                    </div>
+                                </form>
+                               
+                            </div>
+                        </div>
+
+                        <div class="alert alert-warning mb-0">
+                            <strong>Atención:</strong> al contabilizar se enviarán las transacciones al sistema de contabilidad.
+                        </div>
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Id Transaccion</th>
+                                    <th>Descripción</th>
+                                    <th>Fecha Transacción</th>
+                                    <th>Monto Total</th>
+                                    <th>Id Asiento</th>
+                                    <th>Fecha Asiento</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Transacciones)
+                                {
+                                    <tr>
+                                        <td>@item.TransaccionId</td>
+                                        <td>@item.Descripcion</td>
+                                        <td>@item.Fecha</td>
+                                        <td>@item.Monto.ToString("C")</td>
+                                        <td>@item.AsientoId</td>
+                                        <td>@item.FechaAsiento</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Oculta automáticamente el mensaje flotante a los 5 segundos
+    setTimeout(() => {
+        const msg = document.getElementById("procesoMsg");
+        if (msg) msg.style.display = "none";
+    }, 15000);
+</script>
+
+@section cp_style
+{
+    <link href="~/cp/vendor/swiper/css/swiper-bundle.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.4/nouislider.min.css" rel="stylesheet">
+    <link href="~/cp/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="~/cp/vendor/jvmap/jquery-jvectormap.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css" rel="stylesheet">
+    <link href="~/cp/vendor/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <!-- tagify-css -->
+    <link href="~/cp/vendor/tagify/dist/tagify.css" rel="stylesheet">
+}
+
+@section cp_script
+{
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <script src="~/cp/vendor/global/global.min.js"></script>
+    <script src="~/cp/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+
+    <!-- Dashboard 1 -->
+    <script src="js/dashboard/cms.js"></script>
+
+    <!--nestable file-->
+    <script src="~/cp/vendor/nestable2/js/jquery.nestable.min.js"></script>
+
+    <!-- nestable plugins -->
+    <script src="~/cp/js/plugins-init/nestable-init.js"></script>
+    <script src="~/cp/js/custom.js"></script>
+    <script src="~/cp/js/deznav-init.js"></script>
+    <script src="~/cp/js/demo.js"></script>
+@*  <script src="~/cp/js/styleSwitcher.js"></script> *@
+    }

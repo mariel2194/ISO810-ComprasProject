@@ -49,7 +49,7 @@ namespace ISO810_ComprasProject.Controllers
             var result = await _signInManager.PasswordSignInAsync(user, model.Password, true, false);
             if (result.Succeeded)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "OrdenCompras");
             }
 
             ModelState.AddModelError("", "Correo o contraseña incorrectos.");
@@ -81,7 +81,7 @@ namespace ISO810_ComprasProject.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "OrdenCompras");
                 }
 
                 foreach (var error in result.Errors)

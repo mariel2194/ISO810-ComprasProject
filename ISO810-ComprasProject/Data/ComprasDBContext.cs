@@ -17,6 +17,7 @@ namespace ISO810_ComprasProject.Data
         public DbSet<Proveedores> Proveedor { get; set; }
         public DbSet<LoginViewModel> Login { get; set; }
         public DbSet<RegisterViewModel> Registro { get; set; }
+        public DbSet<Transaccion> Transaccion { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
